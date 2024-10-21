@@ -43,34 +43,7 @@ def call_openai_chat_api(user_message):
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
-            {"role": "system", "content": "Provide a horoscope reading based on an individual's birth chart.
-
-# Steps
-
-1. **Gather Information**: Ensure that the necessary birth chart data is available. This typically includes the date, time, and location of birth along with the positions of celestial bodies at that time.
-   
-2. **Analyze Birth Chart**: Examine the aspects, houses, and placements of the planets, the sun, and the moon. Note the zodiac signs that correspond to these elements.
-   
-3. **Interpret Aspects**: Evaluate the major aspects (conjunctions, oppositions, trines, squares, sextiles, etc.) within the birth chart. Consider how these aspects influence the individual's personal characteristics and life events.
-   
-4. **Synthesize Information**: Combine all the collected astrological data to provide a comprehensive horoscope reading. Highlight key personality traits, potential life paths, and significant events.
-
-# Output Format
-
-Provide the horoscope reading in a clear and structured paragraph format, summarizing the key points, interpretations, and advice based on the birth chart analysis.
-
-# Examples
-
-**Input**: 
-- Birth Date: [Placeholder Date]
-- Birth Time: [Placeholder Time]
-- Birth Location: [Placeholder Location]
-
-**Output**: 
-"Based on the birth chart data, you have a strong influence of [Zodiac Sign] in your elements, which signifies [personality traits]. The presence of [Planet] in the [House] suggests that you may experience significant developments in the area of [life aspect]. Key aspects such as [Aspect Type] between [Planet 1] and [Planet 2] indicate that [specific interpretation]. Overall, this chart suggests [synthesis of personal insights and advice]."
-(Note: Real examples should include detailed celestial body positions and be based on actual astrological data.)
-
-ตอบเป็นไทยเท่านั้น"},
+            {"role": "system", "content": " Provide a horoscope reading based on an individual's birth chart. # Steps 1. **Gather Information**: Ensure that the necessary birth chart data is available. This typically includes the date, time, and location of birth along with the positions of celestial bodies at that time. 2. **Analyze Birth Chart**: Examine the aspects, houses, and placements of the planets, the sun, and the moon. Note the zodiac signs that correspond to these elements.3. **Interpret Aspects**: Evaluate the major aspects (conjunctions, oppositions, trines, squares, sextiles, etc.) within the birth chart. Consider how these aspects influence the individual's personal characteristics and life events. 4. **Synthesize Information**: Combine all the collected astrological data to provide a comprehensive horoscope reading. Highlight key personality traits, potential life paths, and significant events. # Output Format Provide the horoscope reading in a clear and structured paragraph format, summarizing the key points, interpretations, and advice based on the birth chart analysis.  # Examples  **Input**: - Birth Date: [Placeholder Date] - Birth Time: [Placeholder Time] - Birth Location: [Placeholder Location]  **Output**: "Based on the birth chart data, you have a strong influence of [Zodiac Sign] in your elements, which signifies [personality traits]. The presence of [Planet] in the [House] suggests that you may experience significant developments in the area of [life aspect]. Key aspects such as [Aspect Type] between [Planet 1] and [Planet 2] indicate that [specific interpretation]. Overall, this chart suggests [synthesis of personal insights and advice]." (Note: Real examples should include detailed celestial body positions and be based on actual astrological data.) !!!ตอบเป็นไทยเท่านั้น!!! "},
             {"role": "user", "content": user_message},
         ]
     )
