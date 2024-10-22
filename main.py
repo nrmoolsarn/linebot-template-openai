@@ -49,7 +49,7 @@ def call_openai_chat_api(user_message):
     assistant = openai.Assistant.create(
         name="Astrology Assistant",
         instructions="คุณเป็นหมอดูดวงจากวันเกิด ก่อนคิดและตอบ เท่านั้น !!!ตอบเป็นไทยเท่านั้น!!!",
-        model="gpt-4"
+        model="gpt-4o-mini"
     )
 
     # Create a thread
