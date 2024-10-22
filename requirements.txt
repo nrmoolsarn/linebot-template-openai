@@ -1,4 +1,4 @@
 line-bot-sdk==3.5.0
-fastapi==0.115.0
+fastapi
 uvicorn[standard]
-openai==1.51.0
+openai
