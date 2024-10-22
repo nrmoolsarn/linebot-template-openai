@@ -37,36 +37,19 @@ _ = load_dotenv(find_dotenv())  # read local .env file
 
 # Initialize OpenAI API
 
-import openai
-import os
 
-# Initialize OpenAI API using the correct method
-openai.api_key = os.getenv('OPENAI_API_KEY')
-
-# Correct implementation for the Assistant API
 def call_openai_chat_api(user_message):
-    # Create the Assistant (replace this with the appropriate API call if needed)
-    assistant = openai.beta.assistants.create(
-        name="Astrology Assistant",
-        instructions="คุณเป็นหมอดูดวงจากวันเกิด ก่อนคิดและตอบ เท่านั้น !!!ตอบเป็นไทยเท่านั้น!!!",
-        model="gpt-4o-mini"
+    openai.api_key = os.getenv('OPENAI_API_KEY', None)
+
+    response = openai.ChatCompletion.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "system", "content": "คุณเป็นหมอดูดวงจากวันเกิด ก่อนคิดและตอบ เท่านั้น  !!!ตอบเป็นไทยเท่านั้น!!! "},
+            {"role": "user", "content": user_message},
+        ]
     )
 
-    # Create a thread
-    thread = openai.beta.threads.create()
-
-    # Add user message to the thread
-    message = openai.beta.threads.messages.create(
-        thread_id=thread.id,
-        role="user",
-        content=user_message
-    )
-
-    # Run the Assistant
-    response = openai.Run.create(thread_id=thread.id, assistant_id=assistant.id)
-
-    # Return assistant response
-    return response['choices'][0]['message']['content']
+    return response.choices[0].message['content']
 
 
 
