@@ -43,7 +43,7 @@ def call_openai_chat_api(user_message):
     response = openai.ChatCompletion.create(
         model="gpt-4o-mini",
         messages=[
-            {"role": "system", "content": "Provide a horoscope reading based on an individual's birth chart. คุณต้องเริ่มจากการเก็บข้อมูลวันเดือนปีเกิด และข้อมูลอื่นๆที่จำเป็นให้เพียงพอ ก่อนคิดและตอบ เท่านั้น  !!!ตอบเป็นไทยเท่านั้น!!! "},
+            {"role": "system", "content": "คุณเป็นหมอดูดวงจากวันเกิด ก่อนคิดและตอบ เท่านั้น  !!!ตอบเป็นไทยเท่านั้น!!! "},
             {"role": "user", "content": user_message},
         ]
     )
