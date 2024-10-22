@@ -46,17 +46,17 @@ openai.api_key = os.getenv('OPENAI_API_KEY')
 # Correct implementation for the Assistant API
 def call_openai_chat_api(user_message):
     # Create the Assistant (replace this with the appropriate API call if needed)
-    assistant = openai.Assistant.create(
+    assistant = openai.beta.assistants.create(
         name="Astrology Assistant",
         instructions="คุณเป็นหมอดูดวงจากวันเกิด ก่อนคิดและตอบ เท่านั้น !!!ตอบเป็นไทยเท่านั้น!!!",
         model="gpt-4o-mini"
     )
 
     # Create a thread
-    thread = openai.Thread.create()
+    thread = openai.beta.threads.create()
 
     # Add user message to the thread
-    message = openai.Message.create(
+    message = openai.beta.threads.messages.create(
         thread_id=thread.id,
         role="user",
         content=user_message
