@@ -37,18 +37,34 @@ _ = load_dotenv(find_dotenv())  # read local .env file
 
 # Initialize OpenAI API
 
-def call_openai_chat_api(user_message):
-    openai.api_key = os.getenv('OPENAI_API_KEY', None)
+import os
+from openai import OpenAI
 
-    response = openai.ChatCompletion.create(
-        model="gpt-4o-mini",
-        messages=[
-            {"role": "system", "content": "คุณเป็นหมอดูดวงจากวันเกิด ก่อนคิดและตอบ เท่านั้น  !!!ตอบเป็นไทยเท่านั้น!!! "},
-            {"role": "user", "content": user_message},
-        ]
+# Initialize OpenAI client
+client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+
+# Create the Assistant
+assistant = client.beta.assistants.create(
+    name="Astrology Assistant",
+    instructions="คุณเป็นหมอดูดวงจากวันเกิด ก่อนคิดและตอบ เท่านั้น !!!ตอบเป็นไทยเท่านั้น!!!",
+    model="gpt-4o-mini",
+)
+
+def call_openai_chat_api(user_message):
+    # Create a new thread for the conversation
+    thread = client.beta.threads.create()
+
+    # Add the user's message to the thread
+    message = client.beta.threads.messages.create(
+        thread_id=thread.id,
+        role="user",
+        content=user_message
     )
 
-    return response.choices[0].message['content']
+    # Create and run the Assistant
+    with client.beta.threads.runs.create(thread_id=thread.id, assistant_id=assistant.id) as run:
+        # Get and return the assistant's response
+        return run['choices'][0]['message']['content']
 
 
 # Get channel_secret and channel_access_token from your environment variable
