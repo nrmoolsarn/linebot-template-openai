@@ -62,14 +62,6 @@ def call_openai_chat_api(user_message, message_history=None):
     return response.choices[0].message['content'], message_history
 
 
-message_history = []
-
-while True:
-    user_message = input("คุณ: ")
-    assistant_reply, message_history = call_openai_chat_api(user_message, message_history)
-    print("หมอดู:", assistant_reply)
-
-
 
 # Get channel_secret and channel_access_token from your environment variable
 channel_secret = os.getenv('ChannelSecret', None)
