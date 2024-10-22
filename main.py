@@ -34,12 +34,14 @@ from linebot.models import (
 from dotenv import load_dotenv, find_dotenv
 _ = load_dotenv(find_dotenv())  # read local .env file
 
+# เก็บประวัติการสนทนาของผู้ใช้แต่ละคน
+user_message_histories = {}
 
 # Initialize OpenAI API
 
-def call_openai_chat_api(user_message, message_history=None):
-    if message_history is None:
-        message_history = []
+def call_openai_chat_api(user_id, user_message):
+    # ดึงประวัติการสนทนาของผู้ใช้ ถ้าไม่มีให้สร้างใหม่
+    message_history = user_message_histories.get(user_id, [])
 
     openai.api_key = os.getenv('OPENAI_API_KEY', None)
 
@@ -59,9 +61,10 @@ def call_openai_chat_api(user_message, message_history=None):
     assistant_message = {"role": "assistant", "content": response.choices[0].message['content']}
     message_history.append(assistant_message)
 
-    return response.choices[0].message['content'], message_history
+    # เก็บประวัติการสนทนาที่อัปเดตกลับเข้าไปใน dict
+    user_message_histories[user_id] = message_history
 
-
+    return response.choices[0].message['content']
 
 # Get channel_secret and channel_access_token from your environment variable
 channel_secret = os.getenv('ChannelSecret', None)
@@ -73,13 +76,12 @@ if channel_access_token is None:
     print('Specify LINE_CHANNEL_ACCESS_TOKEN as environment variable.')
     sys.exit(1)
 
-# Initialize LINE Bot Messaigng API
+# Initialize LINE Bot Messaging API
 app = FastAPI()
 session = aiohttp.ClientSession()
 async_http_client = AiohttpAsyncHttpClient(session)
 line_bot_api = AsyncLineBotApi(channel_access_token, async_http_client)
 parser = WebhookParser(channel_secret)
-
 
 @app.post("/callback")
 async def handle_callback(request: Request):
@@ -100,11 +102,14 @@ async def handle_callback(request: Request):
         if not isinstance(event.message, TextMessage):
             continue
 
-        result = call_openai_chat_api(event.message.text)
+        user_id = event.source.user_id
+
+        # เรียกใช้ฟังก์ชันที่ปรับปรุงแล้ว
+        assistant_reply = call_openai_chat_api(user_id, event.message.text)
 
         await line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text=result)
+            TextSendMessage(text=assistant_reply)
         )
 
     return 'OK'
