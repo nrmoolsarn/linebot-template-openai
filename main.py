@@ -37,19 +37,37 @@ _ = load_dotenv(find_dotenv())  # read local .env file
 
 # Initialize OpenAI API
 
+def call_openai_chat_api(user_message, message_history=None):
+    if message_history is None:
+        message_history = []
 
-def call_openai_chat_api(user_message):
     openai.api_key = os.getenv('OPENAI_API_KEY', None)
+
+    # เพิ่มข้อความของผู้ใช้เข้าไปในประวัติการสนทนา
+    message_history.append({"role": "user", "content": user_message})
+
+    # กำหนดข้อความระบบ
+    system_message = {"role": "system", "content": "คุณเป็นหมอดูดวงจากวันเกิด ก่อนคิดและตอบ เท่านั้น  !!!ตอบเป็นไทยเท่านั้น!!! "}
+    messages = [system_message] + message_history
 
     response = openai.ChatCompletion.create(
         model="gpt-4o-mini",
-        messages=[
-            {"role": "system", "content": "คุณเป็นหมอดูดวงจากวันเกิด ก่อนคิดและตอบ เท่านั้น  !!!ตอบเป็นไทยเท่านั้น!!! "},
-            {"role": "user", "content": user_message},
-        ]
+        messages=messages
     )
 
-    return response.choices[0].message['content']
+    # เพิ่มการตอบกลับของผู้ช่วยเข้าไปในประวัติการสนทนา
+    assistant_message = {"role": "assistant", "content": response.choices[0].message['content']}
+    message_history.append(assistant_message)
+
+    return response.choices[0].message['content'], message_history
+
+
+message_history = []
+
+while True:
+    user_message = input("คุณ: ")
+    assistant_reply, message_history = call_openai_chat_api(user_message, message_history)
+    print("หมอดู:", assistant_reply)
 
 
 
