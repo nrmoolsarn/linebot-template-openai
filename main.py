@@ -116,6 +116,8 @@ async def handle_callback(request: Request):
 
     return 'OK'
 
+# Initialize HealthCheck and EnvironmentDump
+health = HealthCheck()
 
 # Add FastAPI routes for health check 
 @app.get("/healthcheck")
