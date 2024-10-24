@@ -117,14 +117,6 @@ async def handle_callback(request: Request):
 
 
 # Add FastAPI routes for health check 
-app.include_router(
-    HealthcheckRouter(
-        Probe(
-            name="liveness",
-            checks=[
-                ...,
-            ],
-        ),
-    ),
-    prefix="/health",
-)
+@app.get("/liveness")
+async def liveness_probe():
+    return {"status": "alive"}
