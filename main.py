@@ -117,7 +117,6 @@ async def handle_callback(request: Request):
 
 
 # Add FastAPI routes for health check 
-app = FastAPI()
 app.include_router(
     HealthcheckRouter(
         Probe(
