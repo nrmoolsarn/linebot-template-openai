@@ -20,7 +20,6 @@ import json
 import aiohttp
 
 from fastapi import Request, FastAPI, HTTPException
-from healthcheck import HealthCheck
 
 from linebot import (
     AsyncLineBotApi, WebhookParser
@@ -116,10 +115,9 @@ async def handle_callback(request: Request):
 
     return 'OK'
 
-# Initialize HealthCheck and EnvironmentDump
-health = HealthCheck()
 
 # Add FastAPI routes for health check 
-@app.get("/healthcheck")
-def healthcheck():
-    return health.run()
+@app.get("/liveness")
+async def liveness_probe(response: Response):
+    response.status_code = 200
+    return {"status": "alive"}
